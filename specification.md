@@ -21,10 +21,18 @@ The control node can compare the list between deployments of target worker node 
   describes hash algorithm to hash the configuration.
   if specified, 'full' search query must be true.
 
-#### POST /api/deployments/update
-Updates deployments configuration of target machine.
+**Response JSON schema**
+```
+[
+  {
+    "id": "(target deployment id)",
+    "updated_at": $unixtime
+  }
+]
+```
 
-**Request JSON schema**
+**Response JSON schema** (full=true)
+```
 [
   {
     "id": "(target deployment id)",
@@ -33,6 +41,34 @@ Updates deployments configuration of target machine.
   },
   ...
 ]
+```
+
+**Response JSON schema (full=true,hash=true)**
+```
+[
+  {
+    "id": "(target deployment id)",
+    "hash": "hash(deployment configuration toml)",
+    "updated_at": $unixtime
+  }
+]
+```
+
+#### POST /api/deployments/update
+Updates deployments configuration of target machine.
+
+**Request JSON schema**
+
+```
+[
+  {
+    "id": "(target deployment id)",
+    "configuration": "(deployment configuration toml)",
+    "updated_at": $unixtime
+  },
+  ...
+]
+```
 
 The worker node implementation can use updated_at to decide whether it should or should not update the stored deployment configuration.
-The requst list may not contain full deployments configuration of the control node if it had have list of worker node configurations and there is no visible changes to reduce traffic on massive deployments system.
+The request list may not contain full deployments configuration of the control node if it had have list of worker node configurations and there is no visible changes to reduce traffic on massive deployments system.
